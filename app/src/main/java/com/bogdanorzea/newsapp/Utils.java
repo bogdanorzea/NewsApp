@@ -17,13 +17,13 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Utils {
+class Utils {
     private static final String LOG_TAG = Utils.class.getSimpleName();
 
     private Utils() {
     }
 
-    public static List<News> getNewsList(String url) {
+    static List<News> getNewsList(String url) {
         List data = new ArrayList<News>();
 
         String response = null;
@@ -33,7 +33,6 @@ public class Utils {
             Log.e(LOG_TAG, "Problem freeing up the InputStream resources.", e);
         }
 
-        // TODO Parse the JSON response
         JSONObject rootJson = null;
         try {
             rootJson = new JSONObject(response);

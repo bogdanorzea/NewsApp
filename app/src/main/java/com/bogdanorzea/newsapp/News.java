@@ -1,15 +1,31 @@
 package com.bogdanorzea.newsapp;
 
-public class News {
-    String mSectionId;
-    String mPublicationDate;
-    String mTitle;
-    String mUrl;
+class News {
+    private String mSectionId;
+    private String mPublicationDate;
+    private String mTitle;
+    private String mUrl;
 
-    public News(String title, String url, String sectionId, String publicationDate) {
+    News(String title, String url, String sectionId, String publicationDate) {
         this.mSectionId = sectionId;
         this.mPublicationDate = publicationDate;
         this.mTitle = title;
         this.mUrl = url;
+    }
+
+    public String getSectionId() {
+        return mSectionId;
+    }
+
+    public String getPublicationDate() {
+        return mPublicationDate;
+    }
+
+    public String getTitle() {
+        return mTitle;
+    }
+
+    public String getUrl() {
+        return mUrl;
     }
 }

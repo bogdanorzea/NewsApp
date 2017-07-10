@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onLoadFinished(Loader<List<News>> loader, List<News> data) {
-            text.setText(data.get(0).mTitle);
+            text.setText(data.get(0).getTitle());
         }
 
         @Override
