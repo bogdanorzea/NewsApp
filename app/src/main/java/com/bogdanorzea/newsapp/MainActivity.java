@@ -11,13 +11,15 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
+import android.widget.ListView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private final String GUARDIAN_BASE_API_LINK = "https://content.guardianapis.com/search";
-    TextView text;
+    ListView mNewsList;
+    NewsAdaptor newsAdaptor;
 
     private LoaderManager.LoaderCallbacks<List<News>> mLoaderCallbacks = new LoaderManager.LoaderCallbacks<List<News>>() {
         @Override
@@ -33,12 +35,13 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onLoadFinished(Loader<List<News>> loader, List<News> data) {
-            text.setText(data.get(0).getTitle());
+            newsAdaptor.clear();
+            newsAdaptor.addAll(data);
         }
 
         @Override
         public void onLoaderReset(Loader<List<News>> loader) {
-
+            newsAdaptor.clear();
         }
     };
 
@@ -58,7 +61,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        text = (TextView) findViewById(R.id.text);
+        mNewsList = (ListView) findViewById(R.id.news_list);
+
+        // Empty adaptor
+        newsAdaptor = new NewsAdaptor(getBaseContext(), new ArrayList<News>());
+        mNewsList.setAdapter(newsAdaptor);
 
         getSupportLoaderManager().initLoader(0, null, mLoaderCallbacks);
     }

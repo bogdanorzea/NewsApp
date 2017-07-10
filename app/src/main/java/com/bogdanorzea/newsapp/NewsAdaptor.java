@@ -1,13 +1,15 @@
 package com.bogdanorzea.newsapp;
 
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
-
+// TODO Try to apply the ViewHolder pattern
 public class NewsAdaptor extends ArrayAdapter<News> {
     private ArrayList<News> mNewsArray;
 
@@ -33,7 +35,20 @@ public class NewsAdaptor extends ArrayAdapter<News> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        //TODO implement getView
-        return super.getView(position, convertView, parent);
+        if (null == convertView) {
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.news_item, parent, false);
+        }
+        // Get current News item
+        News currentNews = mNewsArray.get(position);
+
+        // Set news title
+        TextView newsTitle = (TextView) convertView.findViewById(R.id.news_title);
+        newsTitle.setText(currentNews.getTitle());
+
+        // Set news section
+        TextView newsSection = (TextView) convertView.findViewById(R.id.news_title);
+        newsSection.setText(currentNews.getSectionId());
+
+        return convertView;
     }
 }
