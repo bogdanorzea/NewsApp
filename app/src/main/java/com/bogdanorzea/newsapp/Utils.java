@@ -2,6 +2,10 @@ package com.bogdanorzea.newsapp;
 
 import android.util.Log;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -22,18 +26,54 @@ public class Utils {
     public static List<News> getNewsList(String url) {
         List data = new ArrayList<News>();
 
-        String responseJson = null;
+        String response = null;
         try {
-            responseJson = makeHttpRequest(url);
+            response = makeHttpRequest(url);
         } catch (IOException e) {
             Log.e(LOG_TAG, "Problem freeing up the InputStream resources.", e);
         }
 
         // TODO Parse the JSON response
+        JSONObject rootJson = null;
+        try {
+            rootJson = new JSONObject(response);
+        } catch (JSONException e) {
+            Log.e(LOG_TAG, "Problem parsing the root JSON response.", e);
+            e.printStackTrace();
+            return data;
+        }
 
-        News dummy = new News();
-        dummy.mTitle = responseJson;
-        data.add(dummy);
+        JSONObject responseJsonObject;
+        JSONArray resultsArray;
+        try {
+            responseJsonObject = rootJson.getJSONObject("response");
+            resultsArray = responseJsonObject.getJSONArray("results");
+        } catch (JSONException e) {
+            Log.e(LOG_TAG, "Problem getting the results array.", e);
+            e.printStackTrace();
+            return data;
+
+        }
+
+        int len = resultsArray.length();
+        for (int i = 0; i < len; i++) {
+            String currentId = null;
+            try {
+                JSONObject currentResult = resultsArray.getJSONObject(i);
+
+                currentId = currentResult.getString("id");
+                String currentSectionId = currentResult.getString("sectionId");
+                String currentSectionPublicationDate = currentResult.getString("webPublicationDate");
+                String currentTitle = currentResult.getString("webTitle");
+                String currentUrl = currentResult.getString("webUrl");
+
+                News currentNews = new News(currentTitle, currentUrl, currentSectionId, currentSectionPublicationDate);
+                data.add(currentNews);
+
+            } catch (JSONException e) {
+                Log.e(LOG_TAG, "Problem parsing the result with id: " + currentId, e);
+            }
+        }
 
         return data;
     }
