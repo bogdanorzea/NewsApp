@@ -27,8 +27,15 @@ public class MainActivity extends AppCompatActivity {
             Uri baseUri = Uri.parse(GUARDIAN_BASE_API_LINK);
             Uri.Builder uriBuilder = baseUri.buildUpon();
 
-            uriBuilder.appendQueryParameter("q", "android");
+            // TODO Add user defined search term
+            //uriBuilder.appendQueryParameter("q", "android");
+            uriBuilder.appendQueryParameter("order-by", "newest");
+            uriBuilder.appendQueryParameter("show-fields", "headline,trailText,thumbnail");
+            uriBuilder.appendQueryParameter("show-tags", "contributor");
             uriBuilder.appendQueryParameter("api-key", "test");
+            // TODO display another page of results
+            //uriBuilder.appendQueryParameter("page", "1");
+            uriBuilder.appendQueryParameter("format", "json");
 
             return new NewsLoader(getBaseContext(), uriBuilder.toString());
         }

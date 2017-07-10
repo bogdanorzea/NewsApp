@@ -57,21 +57,63 @@ class Utils {
         int len = resultsArray.length();
         for (int i = 0; i < len; i++) {
             String currentId = null;
+            JSONObject currentResult = null;
+            News currentNews = null;
+
             try {
-                JSONObject currentResult = resultsArray.getJSONObject(i);
+                currentResult = resultsArray.getJSONObject(i);
 
                 currentId = currentResult.getString("id");
-                String currentSectionId = currentResult.getString("sectionId");
                 String currentSectionPublicationDate = currentResult.getString("webPublicationDate");
-                String currentTitle = currentResult.getString("webTitle");
                 String currentUrl = currentResult.getString("webUrl");
 
-                News currentNews = new News(currentTitle, currentUrl, currentSectionId, currentSectionPublicationDate);
-                data.add(currentNews);
+                currentNews = new News(currentId, currentUrl, currentSectionPublicationDate);
+                currentNews.setSectionName(currentResult.getString("sectionName"));
 
             } catch (JSONException e) {
-                Log.e(LOG_TAG, "Problem parsing the result with id: " + currentId, e);
+                Log.e(LOG_TAG, "Problem parsing the news with id: " + currentId, e);
+                continue;
             }
+
+            // Add additional fields to the news
+            try {
+                if (currentResult.has("fields")) {
+                    JSONObject fieldsJsonObject = currentResult.getJSONObject("fields");
+
+                    if (fieldsJsonObject.has("headline")) {
+                        currentNews.setHeadline(fieldsJsonObject.getString("headline"));
+                    }
+                    if (fieldsJsonObject.has("trailText")) {
+                        currentNews.setTrailText(fieldsJsonObject.getString("trailText"));
+                    }
+                    if (fieldsJsonObject.has("thumbnail")) {
+                        currentNews.setThumbnail(fieldsJsonObject.getString("thumbnail"));
+                    }
+                }
+            } catch (JSONException e) {
+                Log.e(LOG_TAG, "Problem adding additional fields to the news with id: " + currentId, e);
+            }
+
+            // Add additional tags to the news
+            List<String> contributors = new ArrayList<>();
+            try {
+                if (currentResult.has("tags")) {
+                    JSONArray tagsJsonArray = currentResult.getJSONArray("tags");
+                    int lt = tagsJsonArray.length();
+                    for (int j = 0; j < lt; j++) {
+                        JSONObject currentTag = tagsJsonArray.getJSONObject(j);
+                        String currentType = currentTag.getString("type");
+                        if (currentType.equals("contributor")) {
+                            contributors.add(currentTag.getString("webTitle"));
+                        }
+                    }
+                }
+            } catch (JSONException e) {
+                Log.e(LOG_TAG, "Problem adding additional tags to the news with id: " + currentId, e);
+            }
+            currentNews.setContributors(contributors);
+
+            data.add(currentNews);
         }
 
         return data;
