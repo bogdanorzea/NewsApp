@@ -1,3 +1,9 @@
 <resources>
     <dimen name="fab_margin">16dp</dimen>
+    <dimen name="news_item_padding">16dp</dimen>
+    <dimen name="news_section_size">12sp</dimen>
+    <dimen name="news_headline_size">18sp</dimen>
+    <dimen name="news_trail_size">14sp</dimen>
+    <dimen name="news_date_size">12sp</dimen>
+    <dimen name="news_contributor_size">12sp</dimen>
 </resources>

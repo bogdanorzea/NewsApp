@@ -2,16 +2,14 @@ package com.bogdanorzea.newsapp;
 
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +18,7 @@ public class MainActivity extends AppCompatActivity {
     private final String GUARDIAN_BASE_API_LINK = "https://content.guardianapis.com/search";
     ListView mNewsList;
     NewsAdaptor newsAdaptor;
+    TextView emptyView;
 
     private LoaderManager.LoaderCallbacks<List<News>> mLoaderCallbacks = new LoaderManager.LoaderCallbacks<List<News>>() {
         @Override
@@ -36,6 +35,8 @@ public class MainActivity extends AppCompatActivity {
             // TODO display another page of results
             //uriBuilder.appendQueryParameter("page", "1");
             uriBuilder.appendQueryParameter("format", "json");
+
+            emptyView.setText("Loading...");
 
             return new NewsLoader(getBaseContext(), uriBuilder.toString());
         }
@@ -59,21 +60,15 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
         mNewsList = (ListView) findViewById(R.id.news_list);
+        emptyView = (TextView) findViewById(R.id.empty_view);
+        mNewsList.setEmptyView(emptyView);
 
         // Empty adaptor
         newsAdaptor = new NewsAdaptor(getBaseContext(), new ArrayList<News>());
         mNewsList.setAdapter(newsAdaptor);
 
+        // Initialize Loader
         getSupportLoaderManager().initLoader(0, null, mLoaderCallbacks);
     }
 
