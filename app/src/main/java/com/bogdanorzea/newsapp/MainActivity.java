@@ -1,5 +1,8 @@
 package com.bogdanorzea.newsapp;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
@@ -44,7 +47,12 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onLoadFinished(Loader<List<News>> loader, List<News> data) {
             newsAdaptor.clear();
-            newsAdaptor.addAll(data);
+
+            if (data.isEmpty()) {
+                emptyView.setText("No news available");
+            } else {
+                newsAdaptor.addAll(data);
+            }
         }
 
         @Override
@@ -68,8 +76,17 @@ public class MainActivity extends AppCompatActivity {
         newsAdaptor = new NewsAdaptor(getBaseContext(), new ArrayList<News>());
         mNewsList.setAdapter(newsAdaptor);
 
-        // Initialize Loader
-        getSupportLoaderManager().initLoader(0, null, mLoaderCallbacks);
+        // Check internet connection
+        ConnectivityManager cm = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = (activeNetwork != null && activeNetwork.isConnectedOrConnecting());
+
+        // Initialize Loader if the network state is connected
+        if (isConnected) {
+            getSupportLoaderManager().initLoader(0, null, mLoaderCallbacks);
+        } else {
+            emptyView.setText("No internet connection");
+        }
     }
 
     @Override

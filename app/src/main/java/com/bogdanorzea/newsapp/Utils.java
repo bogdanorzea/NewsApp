@@ -1,5 +1,6 @@
 package com.bogdanorzea.newsapp;
 
+import android.text.TextUtils;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -31,6 +32,11 @@ class Utils {
             response = makeHttpRequest(url);
         } catch (IOException e) {
             Log.e(LOG_TAG, "Problem freeing up the InputStream resources.", e);
+        }
+
+        // Return an empty list if there is a problem while making the http request
+        if (TextUtils.isEmpty(response)){
+            return data;
         }
 
         JSONObject rootJson = null;
