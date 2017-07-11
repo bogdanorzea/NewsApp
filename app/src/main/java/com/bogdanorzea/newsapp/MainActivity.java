@@ -39,8 +39,7 @@ public class MainActivity extends AppCompatActivity {
             //uriBuilder.appendQueryParameter("page", "1");
             uriBuilder.appendQueryParameter("format", "json");
 
-            emptyView.setText("Loading...");
-
+            emptyView.setText(R.string.news_loading);
             return new NewsLoader(getBaseContext(), uriBuilder.toString());
         }
 
@@ -49,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
             newsAdaptor.clear();
 
             if (data.isEmpty()) {
-                emptyView.setText("No news available");
+                emptyView.setText(R.string.news_unavailable);
             } else {
                 newsAdaptor.addAll(data);
             }
@@ -76,6 +75,14 @@ public class MainActivity extends AppCompatActivity {
         newsAdaptor = new NewsAdaptor(getBaseContext(), new ArrayList<News>());
         mNewsList.setAdapter(newsAdaptor);
 
+        initializeLoader();
+    }
+
+    /**
+     * Method used to check for the internet connection
+     * adn intialize the Loader used for loading News
+     */
+    private void initializeLoader() {
         // Check internet connection
         ConnectivityManager cm = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
@@ -85,7 +92,8 @@ public class MainActivity extends AppCompatActivity {
         if (isConnected) {
             getSupportLoaderManager().initLoader(0, null, mLoaderCallbacks);
         } else {
-            emptyView.setText("No internet connection");
+            newsAdaptor.clear();
+            emptyView.setText(R.string.no_connection);
         }
     }
 
@@ -103,11 +111,14 @@ public class MainActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (id) {
+            case R.id.action_settings:
+                return true;
+            case R.id.action_refresh:
+                initializeLoader();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-
-        return super.onOptionsItemSelected(item);
     }
 }
