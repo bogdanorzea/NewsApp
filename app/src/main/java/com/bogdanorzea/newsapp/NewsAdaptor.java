@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
-// TODO Try to apply the ViewHolder pattern
+// TODO Implement the ViewHolder pattern
 public class NewsAdaptor extends ArrayAdapter<News> {
     private static final String LOG_TAG = NewsAdaptor.class.getSimpleName();
     private ArrayList<News> mNewsArray;
@@ -69,7 +69,7 @@ public class NewsAdaptor extends ArrayAdapter<News> {
         // Set news date
         TextView newsDate = (TextView) convertView.findViewById(R.id.news_date);
 
-        //TODO Improve date formatting using Android locale settings
+        // TODO Date formatting using Android locale settings
         SimpleDateFormat originalFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US);
         SimpleDateFormat newFormat = new SimpleDateFormat("dd MMM yyyy - HH:mm", Locale.US);
 

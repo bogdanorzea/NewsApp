@@ -6,4 +6,5 @@
     <dimen name="news_trail_size">14sp</dimen>
     <dimen name="news_date_size">12sp</dimen>
     <dimen name="news_contributor_size">12sp</dimen>
+    <dimen name="news_view_spacing">4dp</dimen>
 </resources>
