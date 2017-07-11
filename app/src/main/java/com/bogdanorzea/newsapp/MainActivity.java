@@ -35,9 +35,7 @@ public class MainActivity extends AppCompatActivity {
 
             // Add user defined search term
             SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-            String search_term = sharedPrefs.getString(
-                    getString(R.string.settings_search_content_key),
-                    getString(R.string.settings_search_content_default));
+            String search_term = sharedPrefs.getString(getString(R.string.settings_search_content_key), getString(R.string.settings_search_content_default));
             if (!TextUtils.isEmpty(search_term)) {
                 uriBuilder.appendQueryParameter("q", search_term);
             }
@@ -45,9 +43,12 @@ public class MainActivity extends AppCompatActivity {
             uriBuilder.appendQueryParameter("order-by", "newest");
             uriBuilder.appendQueryParameter("show-fields", "headline,trailText,thumbnail");
             uriBuilder.appendQueryParameter("show-tags", "contributor");
+
+            // Add user defined page size
+            String page_size = sharedPrefs.getString(getString(R.string.settings_page_size_key), getString(R.string.settings_page_size_default));
+            uriBuilder.appendQueryParameter("page-size", page_size);
+
             uriBuilder.appendQueryParameter("api-key", "test");
-            // TODO display another page of results
-            //uriBuilder.appendQueryParameter("page", "1");
             uriBuilder.appendQueryParameter("format", "json");
 
             emptyView.setText(R.string.news_loading);

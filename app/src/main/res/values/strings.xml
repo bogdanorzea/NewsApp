@@ -9,4 +9,7 @@
     <string name="settings_search_content_default">android</string>
     <string name="settings_search_content_key">search_content_key</string>
     <string name="settings_search_content_label">Search term</string>
+    <string name="settings_page_size_default">10</string>
+    <string name="settings_page_size_key">page_size_key</string>
+    <string name="settings_page_size_label">Number of news to display</string>
 </resources>

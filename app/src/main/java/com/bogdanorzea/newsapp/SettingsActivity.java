@@ -21,8 +21,13 @@ public class SettingsActivity extends AppCompatActivity {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.settings_main);
 
+            // Search term
             Preference searchTerm = findPreference(getString(R.string.settings_search_content_key));
             bindPreferenceSummaryToValue(searchTerm);
+
+            // Page size
+            Preference pageSize = findPreference(getString(R.string.settings_page_size_key));
+            bindPreferenceSummaryToValue(pageSize);
         }
 
         @Override
